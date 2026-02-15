@@ -21,7 +21,7 @@ def get_file_content(working_directory, file_path):
 
         with open(target_file, "r") as f:
             file_content_string = f.read(config.MAX_CHARS)
-            # After reading the first MAX_CHARS...
+
             if f.read(1):
                 content += f'[...File "{file_path}" truncated at {config.MAX_CHARS} characters]'
                 return content

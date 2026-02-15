@@ -7,9 +7,9 @@ test_cases = [
     ("calculator", "../", "'../' directory"),
 ]
 
-for worworking_directory, directory, description in test_cases:
+for working_directory, directory, description in test_cases:
     print()
     print(f"Result for {description}:")
-    resultat = get_files_info(worworking_directory, directory)
+    resultat = get_files_info(working_directory, directory)
     print("  " + resultat.replace("\n", "\n  "))
     print("\n"+"------" * 10)
