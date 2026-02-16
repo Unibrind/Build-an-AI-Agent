@@ -3,6 +3,7 @@ import argparse
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
+import prompts
 
 
 load_dotenv()
@@ -25,7 +26,9 @@ def main():
     # gemini-2.5-flash
     generate_content = client.models.generate_content(
         model = 'gemini-2.5-flash',
-        contents = messages)
+        contents = messages,
+        config=types.GenerateContentConfig(system_instruction=prompts.system_prompt),
+        )                                                           # temperature=0
 
     if generate_content.usage_metadata is None:
         raise RuntimeError("Failed to retrieve token usage metadata from Gemini response.")
