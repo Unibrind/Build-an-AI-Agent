@@ -15,7 +15,10 @@ schema_run_python_file = types.FunctionDeclaration(
             ),
             ####### yemat yemas c'est quoi cette syntaXX !? ###########
             "args": types.Schema(
-                type=types.Type.ARRAY,items=types.Type.STRING,
+                type=types.Type.ARRAY,
+                items=types.Schema(
+                    type=types.Type.STRING
+                ),
                 description="Optional list of command arguments to pass to the function"
             )
         },
