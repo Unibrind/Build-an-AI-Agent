@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 import prompts
+import call_function
 
 
 load_dotenv()
@@ -27,9 +28,15 @@ def main():
     generate_content = client.models.generate_content(
         model = 'gemini-2.5-flash',
         contents = messages,
-        config=types.GenerateContentConfig(system_instruction=prompts.system_prompt),
-        )                                                           # temperature=0
-
+        config=types.GenerateContentConfig(tools=[call_function.available_functions], system_instruction=prompts.system_prompt,temperature=0),
+        )
+    
+    if generate_content.function_calls is not None:
+        for items in generate_content.function_calls:
+            print(f"Calling function: {items.name}({items.args})")
+    else:
+        print(generate_content.text)
+    
     if generate_content.usage_metadata is None:
         raise RuntimeError("Failed to retrieve token usage metadata from Gemini response.")
     else:
@@ -37,7 +44,6 @@ def main():
             print(f"User prompt: {args.user_prompt}")
             print(f"Prompt tokens: {generate_content.usage_metadata.prompt_token_count}")
             print(f"Response tokens: {generate_content.usage_metadata.candidates_token_count}")
-        print(generate_content.text)
 
 
 if __name__ == "__main__":
