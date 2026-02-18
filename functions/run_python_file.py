@@ -13,7 +13,6 @@ schema_run_python_file = types.FunctionDeclaration(
                 type=types.Type.STRING,
                 description="The path and name of the python file to Run",
             ),
-            ####### yemat yemas c'est quoi cette syntaXX !? ###########
             "args": types.Schema(
                 type=types.Type.ARRAY,
                 items=types.Schema(

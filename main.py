@@ -28,14 +28,29 @@ def main():
     generate_content = client.models.generate_content(
         model = 'gemini-2.5-flash',
         contents = messages,
-        config=types.GenerateContentConfig(tools=[call_function.available_functions], system_instruction=prompts.system_prompt,temperature=0),
+        config=types.GenerateContentConfig(tools=[call_function.available_functions], 
+                                           system_instruction=prompts.system_prompt,temperature=0),
         )
-    
-    if generate_content.function_calls is not None:
+    result_from_func = []
+    if generate_content.function_calls is not None: 
         for items in generate_content.function_calls:
-            print(f"Calling function: {items.name}({items.args})")
+            function_call_result = call_function.call_function(items, verbose=args.verbose)
+            
+            if function_call_result.parts == []:
+                raise Exception("Empty .parts list")
+            
+            if function_call_result.parts[0].function_response is None:
+                raise Exception("None FunctionResponse")
+            
+            if function_call_result.parts[0].function_response.response is None:
+                raise Exception("No function result")
+            
+            result_from_func.append(function_call_result.parts[0])
+            if args.verbose:
+                print(f"-> {function_call_result.parts[0].function_response.response}")
     else:
         print(generate_content.text)
+    
     
     if generate_content.usage_metadata is None:
         raise RuntimeError("Failed to retrieve token usage metadata from Gemini response.")
