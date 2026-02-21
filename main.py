@@ -34,7 +34,7 @@ def main():
                 config=types.GenerateContentConfig(tools=[call_function.available_functions], 
                                                 system_instruction=prompts.system_prompt,temperature=0),)
             
-            
+            count += 1
             # Observation : Il reçoit les instructions du modèle (candidates).
             # On enregistre ce que l'IA vient de répondre ou de demander.
             if generate_content.candidates is not None:
@@ -52,7 +52,7 @@ def main():
                 print(f"Response tokens: {generate_content.usage_metadata.candidates_token_count}")
             
             result_from_func = []
-            count += 1
+            
             # Action : Il exécute les fonctions si nécessaire.
             if generate_content.function_calls is not None: 
                 for items in generate_content.function_calls:
